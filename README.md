@@ -1,3 +1,6 @@
+![AnimGenerator]([path_to_image_in_repo](https://github.com/hylynyiv/Generative-Design/blob/master/AnimGenerator/PyOpenGLAnim00.gif))
+
+
 # PyOpenGL 3D Animation Kit
 
 This project is a customizable 3D animation kit built using **PyOpenGL** and **GLFW**. It supports procedural generation of various 3D objects such as cubes, spheres, icosahedrons, and pyramids with **physically based rendering (PBR) shaders** for realistic lighting and material effects. The scene includes multiple light sources, object animations, and dynamic camera views, offering flexibility to create visually appealing animations.
