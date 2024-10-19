@@ -33,8 +33,8 @@ pip install pyopengl glfw numpy pyrr
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone [https://github.com/yourusername/your-repo-name](https://github.com/hylynyiv/Generative-Design).git
+cd Generative-Design
 ```
 
 2. **Run the program:**
