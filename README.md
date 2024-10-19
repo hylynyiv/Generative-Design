@@ -1,4 +1,4 @@
-![AnimGenerator]([path_to_image_in_repo](https://github.com/hylynyiv/Generative-Design/blob/master/AnimGenerator/PyOpenGLAnim00.gif))
+![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/AnimGenerator/PyOpenGLAnim00.gif)
 
 
 # PyOpenGL 3D Animation Kit
