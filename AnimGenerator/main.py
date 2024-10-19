@@ -3,10 +3,30 @@ import numpy as np
 from objects import PolyhedralObject, SmoothObject
 from light import Light
 from render import Renderer
+import signal
+import sys
+
+fps = 30
+frame_time = 1.0 / fps
 
 elements_quantity = 65
 movement_speed = 5
 rotation_speed = 1
+
+#Screen Size
+width = 2880
+height = 1800
+
+# Flag to enable/disable recording
+record = True
+renderer = None
+
+def signal_handler(sig, frame):
+    print("\nInterrupt received, stopping gracefully...")
+    global renderer
+    if renderer:
+        renderer.cleanup()
+    sys.exit(0)
 
 
 def create_random_object():
@@ -49,11 +69,16 @@ def create_random_object():
     return obj
 
 def main():
-    width, height = 2880, 1800
-    renderer = Renderer(width, height)
+    global renderer
+    renderer = Renderer(width, height, record=record, fps=fps)
+
+    signal.signal(signal.SIGINT, signal_handler)
 
     try:
         renderer.initialize()
+        if not renderer.initialized:
+            print("Renderer initialization failed. Exiting.")
+            return
 
         # Create lights
         lights = [
@@ -66,17 +91,23 @@ def main():
             renderer.scene.add_light(light)
 
         # Create objects
-        objects = [create_random_object() for _ in range(elements_quantity)]
+        objects = [create_random_object() for _ in range(65)]  # Assuming 65 is your elements_quantity
 
         # Main render loop
-        last_time = glfw.get_time()
-        while not renderer.should_close():
-            current_time = glfw.get_time()
-            delta_time = current_time - last_time
-            last_time = current_time
+        frame_count = 0
+        max_frames = 300  # 10 seconds at 30 fps
 
-            renderer.render(objects, delta_time)
-            renderer.poll_events()
+        while not renderer.should_close() and frame_count < max_frames:
+            renderer.render(objects, 1.0 / fps)  # Pass the frame time
+            frame_count += 1
+            # if frame_count % 10 == 0:
+            #     print(f"Rendered frame {frame_count}")
+
+            # Progress indicator
+            progress = (frame_count / max_frames) * 100
+            print(f"\rProgress: {progress:.2f}% ({frame_count}/{max_frames} frames)", end="", flush=True)
+
+        print("\nRendering complete!")
 
     except Exception as e:
         print(f"An error occurred: {e}")
