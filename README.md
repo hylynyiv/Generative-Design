@@ -59,7 +59,7 @@ pip install imageio[ffmpeg]
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/your-username/AnimGenerator.git
+git clone https://github.com/hylynyiv/Generative-Design/AnimGenerator.git
 cd AnimGenerator
 ```
 
