@@ -5,6 +5,8 @@ from scene import Scene
 import numpy as np
 from recorder import Recorder
 import time
+from genesis import Genesis
+import traceback
 
 # Define constants for anisotropic filtering
 GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF
@@ -26,28 +28,30 @@ class Renderer:
         self.context = None
         self.fps = fps
         self.frame_time = 1.0 / fps
-
-
+        self.genesis = Genesis("world_config.json")  # Initialize Genesis here
 
     def initialize(self):
         try:
             if not glfw.init():
                 raise Exception("GLFW initialization failed")
+            else:
+                print("GLFW initialized.")
 
             if self.record:
-                # self.width, self.height = 7680, 4320
                 self.width, self.height = 2880, 1800
                 glfw.window_hint(glfw.VISIBLE, glfw.FALSE)
                 self.window = glfw.create_window(self.width, self.height, "Offscreen", None, None)
             else:
                 glfw.window_hint(glfw.SAMPLES, 8)
                 self.window = glfw.create_window(self.width, self.height, "PBR Scene", None, None)
+                print(f"Creating window with {self.width}x{self.height}")
 
             if not self.window:
                 raise Exception("Failed to create GLFW window")
 
             glfw.make_context_current(self.window)
             self.context = glfw.get_current_context()
+
 
             glEnable(GL_DEPTH_TEST)
             if not self.record:
@@ -57,21 +61,31 @@ class Renderer:
             self.shader = shader_obj.compile()
             if not self.shader:
                 raise Exception("Shader compilation failed")
+            else:
+                print("Shader compiled. YAY")
 
+            self.genesis.load()
+            print(f"Genesis created {len(self.genesis.elements)} elements.")
             self.scene = Scene(self.shader, self.width, self.height)
+            self.scene.setup_scene(self.genesis)
+
+            # Initialize FBO
             self.fbo, self.hdr_texture = self.create_framebuffer(self.width, self.height)
 
             if self.record:
-                print(f"Initializing recorder with dimensions: {self.width}x{self.height}")
                 self.recorder = Recorder(self.width, self.height, self.fps)
 
             self.initialized = True
             print("Renderer initialized successfully")
+
         except Exception as e:
             print(f"Error during initialization: {e}")
+            traceback.print_exc()
             self.cleanup()
 
-    def render(self, objects, delta_time):
+
+
+    def render(self, delta_time):
         if not self.initialized or not self.context:
             print("Renderer not initialized or no valid context. Skipping render.")
             return
@@ -86,10 +100,7 @@ class Renderer:
 
         glUseProgram(self.shader)
         self.scene.set_camera_and_lighting()
-
-        for obj in objects:
-            model_matrix = obj.animate(delta_time)
-            self.scene.draw_object(model_matrix, obj)
+        self.scene.draw_objects(delta_time)
 
         if self.record and self.recorder:
             pixels = glReadPixels(0, 0, self.width, self.height, GL_RGB, GL_FLOAT)

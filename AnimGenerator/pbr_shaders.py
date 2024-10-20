@@ -34,6 +34,7 @@ class Shader:
 
         const int MAX_LIGHTS = 10;
         uniform vec3 lightPos[MAX_LIGHTS];
+        uniform vec3 lightDir[MAX_LIGHTS];  // Add lightDir for directional lights
         uniform vec3 lightColor[MAX_LIGHTS];
         uniform int numLights;
 
@@ -74,18 +75,26 @@ class Shader:
             vec3 N = normalize(Normal);
             vec3 V = normalize(viewPos - FragPos);
 
-            vec3 F0 = vec3(1);
+            vec3 F0 = vec3(0.04);  // Default reflective base color
             F0 = mix(F0, albedo, metallic);
 
             vec3 Lo = vec3(0.0);
 
             for(int i = 0; i < numLights; i++) {
-                vec3 L = normalize(lightPos[i] - FragPos);
+                vec3 L;
+                float attenuation = 1.0;
+                if (length(lightPos[i]) > 0.0) {  // Point light
+                    L = normalize(lightPos[i] - FragPos);
+                    float distance = length(lightPos[i] - FragPos);
+                    attenuation = 1.0 / (0.1 + distance * distance);  // Attenuation for point light
+                } else {  // Directional light
+                    L = normalize(-lightDir[i]);  // Directional light uses a fixed direction
+                }
+
                 vec3 H = normalize(V + L);
-                float distance = length(lightPos[i] - FragPos);
-                float attenuation = 1.0 / (0.1 + distance * distance);  // Makes light fall-off slower
                 vec3 radiance = lightColor[i] * attenuation;
 
+                // Cook-Torrance BRDF
                 float NDF = DistributionGGX(N, H, roughness);
                 float G = GeometrySmith(N, V, L, roughness);
                 vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
@@ -102,31 +111,13 @@ class Shader:
                 Lo += (kD * albedo / PI + specular) * radiance * NdotL;
             }
 
-            vec3 ambient = vec3(0.3) * albedo * ao;
+            vec3 ambient = vec3(0.03) * albedo * ao;
             vec3 color = ambient + Lo;
 
-            // Improved HDR tonemapping
             color = color / (color + vec3(1.0));
-
-            // Gamma correction
             color = pow(color, vec3(1.0/2.2));
 
-            // Debug coloring based on object type
-            vec3 debug_color;
-            if (roughness < 0.2) {
-                debug_color = vec3(1.0, 0.0, 0.0);  // Red for very smooth objects (likely spheres)
-            } else if (metallic > 0.8) {
-                debug_color = vec3(0.0, 1.0, 0.0);  // Green for very metallic objects
-            } else if (length(Normal) > 0.99) {
-                debug_color = vec3(0.0, 0.0, 1.0);  // Blue for objects with consistent normals (like cubes)
-            } else {
-                debug_color = vec3(1.0, 1.0, 0.0);  // Yellow for other objects
-            }
-            if (length(color) < 0.001) {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);  // Bright red for visibility
-            } else {
-                gl_FragColor = vec4(color, 1.0);
-            }
+            gl_FragColor = vec4(color, 1.0);
         }
         """
 
