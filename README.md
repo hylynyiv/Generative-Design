@@ -202,5 +202,3 @@ If you find any issues or have feature requests, feel free to open an issue or s
 - For complex scene setups, use keyframe animations to control object movement and rotation over time.
 
 ---
-
-That should be a good starting point for your `README` file. Let me know if you'd like to add anything else!
