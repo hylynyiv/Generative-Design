@@ -1,8 +1,5 @@
 ![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/AnimGenerator/PyOpenGLAnim00.gif)
 
-
-Here's a detailed README for your project, incorporating all the elements you mentioned:
-
 ---
 
 # **AnimGenerator**
