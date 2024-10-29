@@ -59,7 +59,7 @@ To get started, clone this repository:
 
 ```bash
 git clone https://github.com/hylynyiv/Generative-Design.git
-cd Generative-Design/Anima\ Fresnel
+cd Generative-Design/Anima-Fresnel
 ```
 
 ---
