@@ -1,4 +1,5 @@
-![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/Anima%20Fresnel/PyOpenGLAnim00.gif)
+![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/Anima-Fresnel/PyOpenGLAnim00.gif)
+
 
 
 ---
