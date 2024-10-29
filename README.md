@@ -2,9 +2,9 @@
 
 ---
 
-# **AnimGenerator**
+# **Anima Fresnel**
 
-AnimGenerator is a real-time rendering engine written in Python using OpenGL. It allows users to create 3D scenes composed of customizable objects, lights, and cameras using a JSON configuration file. The engine supports physically based rendering (PBR), custom animations, and object arrangement in different patterns (grid, circular, and spiral). It also includes functionality for recording the rendered scenes.
+Anima Fresnel is a real-time rendering engine written in Python using OpenGL. It allows users to create 3D scenes composed of customizable objects, lights, and cameras using a JSON configuration file. The engine supports physically based rendering (PBR), custom animations, and object arrangement in different patterns (grid, circular, and spiral). It also includes functionality for recording the rendered scenes.
 
 ## **Features**
 - **Physically Based Rendering (PBR)** for realistic material properties like albedo, metallic, roughness, and ambient occlusion.
