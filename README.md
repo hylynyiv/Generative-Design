@@ -1,4 +1,5 @@
-![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/AnimGenerator/PyOpenGLAnim00.gif)
+![Animation Preview](![Animation Preview](https://github.com/hylynyiv/Generative-Design/raw/master/Anima%20Fresnel/PyOpenGLAnim00.gif)
+)
 
 ---
 
@@ -56,8 +57,8 @@ pip install imageio[ffmpeg]
 To get started, clone this repository:
 
 ```bash
-git clone https://github.com/hylynyiv/Generative-Design/AnimGenerator.git
-cd AnimGenerator
+git clone https://github.com/hylynyiv/Generative-Design.git
+cd Generative-Design/Anima\ Fresnel
 ```
 
 ---
